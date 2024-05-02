@@ -1,0 +1,1 @@
+analyzeNetwork(vggNet(502, 4))

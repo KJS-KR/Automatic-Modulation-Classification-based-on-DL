@@ -1,0 +1,307 @@
+clc; clear; close all;
+
+%% Setting
+
+modTypes = categorical(["BPSK", "QPSK", "8PSK", "16QAM", "32QAM", "64QAM", "4PAM", "8PAM"]);
+numModTypes = length(modTypes);
+
+spf = 16; %512;
+N_Frame = 100; % 2000;
+signalBurstRange = spf * N_Frame;
+snr = -20:2:30;
+numSnr = length(snr);
+trainDataRatio = 0.5;   % 훈련 프레임 비율
+validDataRatio = 0.5;   % 검증 프레임 비율
+
+%% BPSK 신호 생성
+modNumBpsk = 2;
+
+randBit = randi([0 modNumBpsk-1], signalBurstRange, 1);
+
+sigBpsk = pskmod(randBit, 2);
+
+figure;
+subplot(3, 4, 1)
+plot(real(sigBpsk), imag(sigBpsk), 'x');
+title("BPSK")
+axis([-2 2 -2 2])
+
+%% QPSK 신호 생성
+modNumQpsk = 4;
+
+randBit = randi([0 modNumQpsk-1], signalBurstRange, 1);
+
+sigQpsk = pskmod(randBit, 4, pi/4);
+
+subplot(3, 4, 2)
+plot(real(sigQpsk), imag(sigQpsk), 'x');
+title("QPSK")
+axis([-2 2 -2 2])
+
+%% 8PSK 신호 생성
+modNum8psk = 8;
+
+randBit = randi([0 modNum8psk-1], signalBurstRange, 1);
+
+sig8psk = pskmod(randBit, 8, pi/4);
+
+subplot(3, 4, 3)
+plot(real(sig8psk), imag(sig8psk), 'x');
+title("8PSK")
+axis([-2 2 -2 2])
+
+%% OQPSK 신호 생성
+% modNumOqpsk = 4;
+% 
+% randBit = randi([0 1], 1000, 1);
+% 
+% oqpskmod = comm.OQPSKModulator('BitInput',true);
+% sigOqpsk = oqpskmod(randBit);
+% 
+% subplot(3, 4, 4)
+% plot(real(sigOqpsk), imag(sigOqpsk), 'x');
+% title("OQPSK")
+% axis([-2 2 -2 2])
+
+%% 2FSK 신호 생성
+% modNum2fsk = 2;
+% 
+% randBit = randi([0 modNum2fsk-1], 1000, 1);
+% 
+% sig2fsk = fskmod(randBit, 2);
+% 
+% subplot(3, 4, 5)
+% plot(real(sig2fsk), imag(sig2fsk), 'x');
+% title("2FSK")
+% axis([-2 2 -2 2])
+
+%% 4FSK 신호 생성
+% modNum4fsk = 4;
+% 
+% randBit = randi([0 modNum4fsk-1], 1000, 1);
+% 
+% sig4fsk = fskmod(randBit, 4);
+% 
+% subplot(3, 4, 6)
+% plot(real(sig4fsk), imag(sig4fsk), 'x');
+% title("4FSK")
+% axis([-2 2 -2 2])
+
+%% 8FSK 신호 생성
+% modNum8fsk = 8;
+% 
+% randBit = randi([0 modNum8fsk-1], 1000, 1);
+% 
+% sig8fsk = fskmod(randBit, 8);
+% 
+% subplot(3, 4, 7)
+% plot(real(sigOqpsk), imag(sigOqpsk), 'x');
+% title("8FSK")
+% axis([-2 2 -2 2])
+
+%% 16QAM 신호 생성
+modNum16qam = 16;
+
+randBit = randi([0 modNum16qam-1], signalBurstRange, 1);
+
+sig16qam = qammod(randBit, modNum16qam, 'UnitAveragePower', true);
+
+subplot(3, 4, 8)
+plot(real(sig16qam), imag(sig16qam), 'x');
+title("16QAM")
+axis([-2 2 -2 2])
+
+%% 32QAM 신호 생성
+modNum32qam = 32;
+
+randBit = randi([0 modNum32qam-1], signalBurstRange, 1);
+
+sig32qam = qammod(randBit, modNum32qam, 'UnitAveragePower', true);
+
+subplot(3, 4, 9)
+plot(real(sig32qam), imag(sig32qam), 'x');
+title("32QAM")
+axis([-2 2 -2 2])
+
+%% 64QAM 신호 생성
+modNum64qam = 64;
+
+randBit = randi([0 modNum64qam-1], signalBurstRange, 1);
+
+sig64qam = qammod(randBit, modNum64qam, 'UnitAveragePower', true);
+
+subplot(3, 4, 10)
+plot(real(sig64qam), imag(sig64qam), 'x');
+title("64QAM")
+axis([-2 2 -2 2])
+
+%% 4PAM 신호 생성
+modNum4pam = 4;
+
+randBit = randi([0 modNum4pam-1], signalBurstRange, 1);
+
+sig4pam = pammod(randBit, modNum4pam);
+sig4pam = normalize(sig4pam);
+
+subplot(3, 4, 11)
+plot(real(sig4pam), imag(sig4pam), 'x');
+title("4PAM")
+axis([-2 2 -2 2])
+
+
+%% 8PAM 신호 생성
+modNum8pam = 8;
+
+randBit = randi([0 modNum8pam-1], signalBurstRange, 1);
+
+sig8pam = pammod(randBit, modNum8pam);
+sig8pam = normalize(sig8pam);
+
+subplot(3, 4, 12)
+plot(real(sig8pam), imag(sig8pam), 'x');
+title("8PAM")
+axis([-2 2 -2 2])
+
+% for n = 1:numSnr
+
+% BPSK
+awgnSigBpsk = awgn(sigBpsk, 10);
+sigBpsk = reshape(sigBpsk, spf, N_Frame);
+dataBpsk(:,1,:) = real(sigBpsk);
+dataBpsk(:,2,:) = imag(sigBpsk);
+
+% QPSK
+awgnSigQpsk = awgn(sigQpsk, 10);
+sigQpsk = reshape(sigQpsk, spf, N_Frame);
+dataQpsk(:,1,:) = real(sigQpsk);
+dataQpsk(:,2,:) = imag(sigQpsk);
+
+% 8PSK
+awgnSig8psk = awgn(sig8psk, 10);
+sig8psk = reshape(sig8psk, spf, N_Frame);
+data8psk(:,1,:) = real(sig8psk);
+data8psk(:,2,:) = imag(sig8psk);
+
+% 16QAM
+awgnSig16qam = awgn(sig16qam, 10);
+sig16qam = reshape(sig16qam, spf, N_Frame);
+data16qam(:,1,:) = real(sig16qam);
+data16qam(:,2,:) = imag(sig16qam);
+
+% 32QAM
+awgnSig32qam = awgn(sig32qam, 10);
+sig32qam = reshape(sig32qam, spf, N_Frame);
+data32qam(:,1,:) = real(sig32qam);
+data32qam(:,2,:) = imag(sig32qam);
+
+% 64QAM
+awgnSig64qam = awgn(sig64qam, 10);
+sig64qam = reshape(sig64qam, spf, N_Frame);
+data64qam(:,1,:) = real(sig64qam);
+data64qam(:,2,:) = imag(sig64qam);
+
+% 4PAM
+awgnSig4pam = awgn(sig4pam, 10);
+sig4pam = reshape(sig4pam, spf, N_Frame);
+data4pam(:,1,:) = real(sig4pam);
+data4pam(:,2,:) = imag(sig4pam);
+
+% 8PAM
+awgnSig8pam = awgn(sig8pam, 10);
+sig8pam = reshape(sig8pam, spf, N_Frame);
+data8pam(:,1,:) = real(sig8pam);
+data8pam(:,2,:) = imag(sig8pam);
+
+% Total Training Set
+trainingData(:,:,1:N_Frame*trainDataRatio) = dataBpsk(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio+1:N_Frame*trainDataRatio*2) = dataQpsk(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio*2+1:N_Frame*trainDataRatio*3) = data8psk(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio*3+1:N_Frame*trainDataRatio*4) = data16qam(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio*4+1:N_Frame*trainDataRatio*5) = data32qam(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio*5+1:N_Frame*trainDataRatio*6) = data64qam(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio*6+1:N_Frame*trainDataRatio*7) = data4pam(:,:,1:N_Frame*trainDataRatio);
+trainingData(:,:,N_Frame*trainDataRatio*7+1:N_Frame*trainDataRatio*8) = data8pam(:,:,1:N_Frame*trainDataRatio);
+
+validationData(:,:,1:N_Frame*validDataRatio) = dataBpsk(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*validDataRatio+1:N_Frame*validDataRatio*2) = dataQpsk(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*validDataRatio*2+1:N_Frame*validDataRatio*3) = data8psk(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*trainDataRatio*3+1:N_Frame*trainDataRatio*4) = data16qam(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*trainDataRatio*4+1:N_Frame*trainDataRatio*5) = data32qam(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*trainDataRatio*5+1:N_Frame*trainDataRatio*6) = data64qam(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*trainDataRatio*6+1:N_Frame*trainDataRatio*7) = data4pam(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+validationData(:,:,N_Frame*trainDataRatio*7+1:N_Frame*trainDataRatio*8) = data8pam(:,:,1+N_Frame*trainDataRatio:N_Frame*trainDataRatio+N_Frame*validDataRatio);
+
+% Labeling Training Set
+for n = 1:N_Frame* trainDataRatio * numModTypes 
+    rxTrainFrames(1,:,:,n) = trainingData(:,:,n);
+    if n <=N_Frame* trainDataRatio
+        rxTrainLabels(n) = modTypes(1);
+    elseif n<=N_Frame* trainDataRatio *2
+        rxTrainLabels(n) = modTypes(2);
+    elseif n<=N_Frame* trainDataRatio *3
+        rxTrainLabels(n) = modTypes(3);
+    elseif n<=N_Frame* trainDataRatio *4
+        rxTrainLabels(n) = modTypes(4);
+    elseif n<=N_Frame* trainDataRatio *5
+        rxTrainLabels(n) = modTypes(5);
+    elseif n<=N_Frame* trainDataRatio *6
+        rxTrainLabels(n) = modTypes(6);
+    elseif n<=N_Frame* trainDataRatio *7
+        rxTrainLabels(n) = modTypes(7);
+    elseif n>N_Frame* trainDataRatio *7
+        rxTrainLabels(n) = modTypes(8);
+    end
+end
+
+% Labeling Validation Set
+for n = 1:N_Frame* validDataRatio * numModTypes 
+    rxValidFrames(1,:,:,n) = trainingData(:,:,n);
+    if n <=N_Frame* trainDataRatio
+        rxValidLabels(n) = modTypes(1);
+    elseif n<=N_Frame* trainDataRatio *2
+        rxValidLabels(n) = modTypes(2);
+    elseif n<=N_Frame* trainDataRatio *3
+        rxValidLabels(n) = modTypes(3);
+    elseif n<=N_Frame* trainDataRatio *4
+        rxValidLabels(n) = modTypes(4);
+    elseif n<=N_Frame* trainDataRatio *5
+        rxValidLabels(n) = modTypes(5);
+    elseif n<=N_Frame* trainDataRatio *6
+        rxValidLabels(n) = modTypes(6);
+    elseif n<=N_Frame* trainDataRatio *7
+        rxValidLabels(n) = modTypes(7);
+    elseif n>N_Frame* trainDataRatio *7
+        rxValidLabels(n) = modTypes(8);
+    end
+end
+
+netWidth    = 1;
+filterSize  = [2 21];
+poolSize    = [1 2];
+
+modClassNet = [
+      imageInputLayer([1 512 2], 'Normalization', 'none', 'Name', 'Input Layer')
+    
+      convolution2dLayer([2 21], 256, 'Padding', 'same', 'Name', 'CNN1')
+      batchNormalizationLayer('Name', 'BN1')
+      reluLayer('Name', 'ReLU1')
+      maxPooling2dLayer(poolSize, 'Stride', [1 2], 'Name', 'MaxPool1')
+      dropoutLayer(0.6, "Drop1")
+    
+      convolution2dLayer([2 21], 80, 'Padding', 'same', 'Name', 'CNN2')
+      batchNormalizationLayer('Name', 'BN2')
+      reluLayer('Name', 'ReLU2')
+      maxPooling2dLayer(poolSize, 'Stride', [1 2], 'Name', 'MaxPool2')
+      dropoutLayer(0.6, "Drop2")
+    
+%       averagePooling2dLayer('Name', 'AP1')
+    
+      fullyConnectedLayer(numModTypes, 'Name', 'FC1')
+      softmaxLayer('Name', 'SoftMax')
+    
+      classificationLayer('Name', 'Output') ];
+
+
+
+
+% end
